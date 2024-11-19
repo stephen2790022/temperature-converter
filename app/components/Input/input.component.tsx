@@ -13,10 +13,6 @@ export const InputComponent = ({
   defaultValue = "0",
   handleInputChange,
 }: InputProps) => {
-  const test = "1.5";
-  const test2 = "1.5er";
-  console.log(isNaN(Number("1.5er")));
-  console.log(Number(test));
   return (
     <View style={styles.container}>
       <TextInput

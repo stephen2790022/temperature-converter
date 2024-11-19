@@ -6,15 +6,14 @@ import { InputComponent } from "./components/Input/input.component";
 import { useCallback, useMemo, useState } from "react";
 import { TemperatureDisplay } from "./components/temperature-display/temperature-display.component";
 
-// import Cold from "../assets/images/cold.png";
-
+const defaultTemperature = "0";
 export default function Index() {
   const unit = {
     celsius: "°C",
     fahrenheit: "°F",
   };
   const [selectedUnit, setSelectedUnit] = useState(unit.celsius);
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>(defaultTemperature);
   const hotImg = require("../assets/images/hot.png");
   const coldImg = require("../assets/images/cold.png");
 
@@ -34,17 +33,17 @@ export default function Index() {
       return Number(inputValue) * 1.8 + 32;
     }
     return (Number(inputValue) - 32) * 1.8;
-  }, [inputValue]);
+  }, [inputValue, selectedUnit]);
 
   const getTemperature = useCallback(() => {
     if (inputValue && isNumberNaN(inputValue))
       return `${inputValue} is not a number`;
     if (!inputValue) return "-";
     return handleCalculation().toFixed(1);
-  }, [inputValue]);
+  }, [inputValue, selectedUnit]);
 
   const imgLink =
-    !isNumberNaN(inputValue) && handleCalculation() < 0 ? coldImg : hotImg;
+    !isNumberNaN(inputValue) && handleCalculation() <= 0 ? coldImg : hotImg;
 
   return (
     <SafeAreaProvider>
@@ -64,7 +63,7 @@ export default function Index() {
             />
             <View>
               <TouchableOpacity
-                onPress={() => setSelectedUnit(getOppositeUnit())}
+                onPress={() => setSelectedUnit(getOppositeUnit)}
                 style={{
                   backgroundColor: "#007BFF",
                   paddingVertical: 10,
